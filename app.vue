@@ -1,4 +1,4 @@
 <template>
-  <LandingPage />
+    hello
 </template>
 

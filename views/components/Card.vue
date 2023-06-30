@@ -1,9 +1,17 @@
 <template>
-    <div class="card" style="width: 40rem;">
-        <img class="card-img-top" src="assets/images/capa.jpg" alt="Card image cap">
+    <div class="card" style="max-width: 40rem;">
+        <img class="card-img-top" src="assets/images/capa.jpg" alt="Card image cap w-25">
         <div class="card-body">
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.</p>
+            <p class="card-text">{{ text }}</p>
         </div>
     </div>
 </template>
+
+
+<script lang="ts">
+    export default {
+        props: {
+            text: String,
+        }
+    }
+</script>

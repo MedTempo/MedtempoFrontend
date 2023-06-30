@@ -10,7 +10,7 @@
     <main>
       <section id="home" class="intro main-bg section-home">
         <div class="intro-img">
-          <img src="assets/images/capa.jpg" alt="Capa MedTempo" />
+          <img src="/assets/images/capa.jpg" alt="Capa MedTempo" />
         </div>
         <div class="intro-titulo">BEM-VINDO AO MEDTEMPO!</div>
         <div class="intro-subtitulo">MEDICAÇÃO NA HORA</div>
@@ -38,7 +38,7 @@
             </p>
           </div>
           <div class="intro-img">
-            <img src="assets/images/sobre.svg" alt="Fundo MedTempo." />
+            <img src="/assets/images/sobre.svg" alt="Fundo MedTempo." />
           </div>
         </div>
       </section>
@@ -47,11 +47,7 @@
         <div class="main-content top3-content">
           <h2 class="cadastro">TIPOS DE CADASTRO</h2>
           <div class="row">
-
-            <componentsCard />
-            <componentsCard />
-            <componentsCard />
-
+            <componentsCard v-for="i in [`Eu sou a props1`, `eu sou a props2`, `eu sou a props3`]" :text="i" />
           </div>
         </div>
       </section>
@@ -59,15 +55,15 @@
       <section id="suporte" class="intro main-bg section-suporte">
         <div class="main-content intro-content">
           <div class="intro-text-content">
-            <img src="assets/images/download.svg" alt="Fundo MedTempo." />
+            <img src="/assets/images/download.svg" alt="Fundo MedTempo." />
           </div>
           <div class="suporte-texto">
             <h2 class="h2-suporte-texto">FAÇA DOWNLOAD</h2>
             <p class="b-suporte-texto">Baixe nosso app agora mesmo e transforme sua experiência</p>
             <div class="img-suporte">
-              <a href="https://www.apple.com" target="_blank"> <img src="assets/images/apple.png"
+              <a href="https://www.apple.com" target="_blank"> <img src="/assets/images/apple.png"
                   alt="Apple Store." /></a>
-              <a href="https://play.google.com/store/" target="_blank"> <img src="assets/images/play.png"
+              <a href="https://play.google.com/store/" target="_blank"> <img src="/assets/images/play.png"
                   alt="Play Store." /></a>
             </div>
             <p class="d-suporte-texto">Disponível na apple store e no google play</p>
@@ -81,7 +77,7 @@
         <div class="main-content top3-content">
           <h2>CRIADORES</h2>
           <div class="sobre-nos">
-            <img src="assets/images/mateus.png" alt="Mateus." />
+            <img src="/assets/images/mateus.png" alt="Mateus." />
             <p class="mateus">Mateus Felipe Vieira</p>
           </div>
         </div>

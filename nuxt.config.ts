@@ -7,5 +7,4 @@ export default defineNuxtConfig({
   css:[
     '~/node_modules/bootstrap/scss/bootstrap.scss'
   ]
-
 })
