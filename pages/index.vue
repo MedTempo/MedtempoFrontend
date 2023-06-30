@@ -1,11 +1,11 @@
 <style lang="scss" src="../public/assets/css/style.scss"></style>
 
 <template>
-  <componentsHead />
+  <medHead />
 
   <Body>
 
-    <componentsHeader />
+    <medHeader />
 
     <main>
       <section id="home" class="intro main-bg section-home">
@@ -47,7 +47,7 @@
         <div class="main-content top3-content">
           <h2 class="cadastro">TIPOS DE CADASTRO</h2>
           <div class="row">
-            <componentsCard v-for="i in [`Eu sou a props1`, `eu sou a props2`, `eu sou a props3`]" :text="i" />
+            <medCard v-for="i in [`Eu sou a props1`, `eu sou a props2`, `eu sou a props3`]" :text="i" />
           </div>
         </div>
       </section>
@@ -86,7 +86,7 @@
 
     <a class="back-to-top" href="#">▶</a>
 
-    <componentsFooter />
+    <medFooter />
 
   </Body>
 </template>
