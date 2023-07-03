@@ -1,4 +1,4 @@
-<style lang="scss" src="../public/assets/css/style.scss"></style>
+<style lang="scss" src="../public/assets/css/style.scss"/>
 
 <template>
   <medHead />

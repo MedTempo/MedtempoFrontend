@@ -5,5 +5,6 @@ export default defineNuxtConfig({
     '~/node_modules/bootstrap/scss/bootstrap.scss'
   ],
   pages: true,
+  ssr: true,
   
 })
