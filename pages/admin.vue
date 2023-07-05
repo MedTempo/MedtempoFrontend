@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <form>
 
-        <input type="text" v-model="usr.nome" name="nome" placeholder="insira nome" id="">
-        <input type="text" v-model="usr.sobrenome" name="sobrenome" placeholder="insira sobrenome" id="">
-        <input type="text" v-model.number="usr.idade" name="idade" placeholder="insira idade" id="">
+        <input type="text" v-model="usr.nome" name="nome" placeholder="insira nome" id="" required>
+        <input type="text" v-model="usr.sobrenome" name="sobrenome" placeholder="insira sobrenome" id="" required>
+        <input type="text" v-model.number="usr.idade" name="idade" placeholder="insira idade" id="" required>
 
         <select v-model="usr.sexo">
             <option disabled value="">Insira seu Sexo</option>
@@ -11,18 +11,22 @@
             <option v-bind:value="false">Masculino</option>
         </select>
 
-        <input type="email" v-model="usr.email" name="email" placeholder="insira email" id="">
-        <input type="password" v-model="usr.senha" name="senha" placeholder="insira senha" id="" />
+        <input type="email" v-model="usr.email" name="email" placeholder="insira email" id="" required>
+        <input type="password" v-model="usr.senha" name="senha" placeholder="insira senha" id="" required />
 
         <input type="date" v-model="usr.data_nascimento" name="data_nascimento" placeholder="insira data de nascimento"
-            id="">
+            id="" required>
 
 
-        <textarea v-model="usr.descricao" name="descricao" placeholder="insira descricao" id="" cols="30" rows="10"></textarea>
+        <textarea v-model="usr.descricao" name="descricao" placeholder="insira descricao" id="" required cols="30"
+            rows="10"></textarea>
 
         <input value="Send to Back" @click="Send($event)" type="button" />
-    </div>
+    </form>
 
+    <div>
+        {{ res }}
+    </div>
 
     <div>
         <h2>Data:</h2>
@@ -35,54 +39,197 @@
         </div>
         <div v-else>
             <div>
-                {{ posts }}
+                {{ usuarios }}
 
             </div>
         </div>
 
     </div>
+
+    <div v-for="(user, i) in usuarios?.data.usuario_pessoal.values">
+
+        {{ i }}
+
+        <h5>Id: {{ user.id }}</h5>
+        <h1>Nome: {{ user.nome }}</h1>
+        <p>Idade: {{ user.idade }}</p>
+
+        <p>Sexo: {{ user.sexo === true ? `Feminino` : `Masculino` }}</p>
+
+        <p>Email: {{ user.email }}</p>
+        <p>Senha Hash: {{ user.senha }}</p>
+
+        <p>Data de Nascimento: {{ user.data_nascimento }}</p>
+        <p>Data de Criacao: {{ user.data_criacao }}</p>
+
+        <p>Descriacao: {{ user.descricao }}</p>
+
+        <input :value="`Delete ${user.nome}`" type="button" @click="Delete(user.id)">
+
+        <hr>
+
+    </div>
+
+
+    <div>
+        <h1> UPDATE </h1>
+
+        <div v-for="(usuario, i) in usuario_patch">
+            <form>
+
+                {{ i }}
+
+                <input type="text" @input="usuario_patch[i].nome = $event.target?.value" :value="usuario.nome" name="nome"
+                    placeholder="insira nome" id="" required>
+                <input type="text" @input="usuario_patch[i].sobrenome = $event.target?.value" :value="usuario.sobrenome"
+                    name="sobrenome" placeholder="insira sobrenome" id="" required>
+                <input type="text" @input="usuario_patch[i].idade = parseInt($event.target?.value)"
+                    :value.number="usuario.idade" name="idade" placeholder="insira idade" id="" required>
+
+                <select
+                    @input="$event.target?.value == `true` ? usuario_patch[i].sexo = true : ($event.target?.value == `false` ? usuario_patch[i].sexo = false : null);"
+                    :value="usuario.sexo">
+                    <option disabled value="">Insira seu Sexo</option>
+                    <option v-bind:value="true">Feminino</option>
+                    <option v-bind:value="false">Masculino</option>
+                </select>?
+
+                <input type="email" @input="usuario_patch[i].email = $event.target?.value" :value="usuario.email"
+                    name="email" placeholder="insira email" id="" required>
+                <input type="password" :value="usuario.senha" name="senha" placeholder="insira senha" id="" required />
+
+                <input type="date" @input="usuario_patch[i].data_nascimento = $event.target?.value"
+                    :value="usuario.data_nascimento" name="data_nascimento" placeholder="insira data de nascimento" id=""
+                    required>
+
+
+                <textarea @input="usuario_patch[i].descricao = $event.target?.value" :value="usuario.descricao"
+                    name="descricao" placeholder="insira descricao" id="" required cols="30" rows="10"></textarea>
+
+                <input :value="`Update ` + usuario.id" @click="usuario_patch[i].id = usuario.id; Patch(usuario_patch[i])"
+                    type="button" />
+            </form>
+
+        </div>
+
+
+        {{
+
+            usuario_patch
+        }}
+
+    </div>
 </template>
-<script setup lang="ts">
-const { pending, data: posts, error } = useFetch(`http://127.0.0.1:7777/`, {
-    lazy: true,
-})
+<script lang="ts">
 
-interface usuario_pessoal {
-    id: string,
-    nome: string,
-    sobrenome: string,
-    idade: number,
-    sexo: boolean
+import address from '../components/address';
 
-    email: string,
-    senha: string
-
-    data_criacao: string
-    data_nascimento: string
-
-    descricao: string
-}
-
-let usr: usuario_pessoal = {
-    "id": "",
-    "data_criacao": Date(),
-    "data_nascimento": Date(),
-    "descricao": "",
-    "email": "",
-    "senha": "",
-    "idade": 0,
-    "nome": "",
-    "sexo": false,
-    "sobrenome": ""
-}
-
-function Send($event: Event) {
+import type { usuario_pessoal, req_user_pessoal } from "../interfaces/usuarios"
 
 
-    usr.data_criacao = new Date().toISOString().slice(0,10)
+export default {
+    name: `admin`,
+
+    setup() {
+        const { pending, data: usuarios, error, refresh } = useFetch<req_user_pessoal>(address, {
+            lazy: true,
+
+            watch: []
+        })
+
+        let usuario_patch: Array<usuario_pessoal> = usuarios.value?.data.usuario_pessoal.values.slice()
 
 
-    console.log(usr)
+            return { pending, usuarios, usuario_patch, error }
+    },
+
+    data() {
+        return {
+            usr: {
+                "id": "",
+                //"data_criacao": Date(),
+                "data_nascimento": Date(),
+                "descricao": "",
+                "email": "",
+                "senha": "",
+                "idade": 0,
+                "nome": "",
+                "sexo": null,
+                "sobrenome": ""
+            } as usuario_pessoal,
+
+            res: {} as unknown
+        }
+    },
+
+    methods: {
+        async Send($event: Event) {
+
+            //this.usr.data_criacao = new Date().toISOString().slice(0, 10)
+
+
+            if (this.usr.idade > 127) {
+                //       return alert(`idade invalida`)
+            }
+
+            const { pending, data: usuarios, error } = await useFetch<req_user_pessoal>(`${address}usuarios/`, {
+                lazy: true,
+
+                headers: {
+                    "Content-Type": "application/json",
+                },
+
+                method: `POST`,
+
+                body: this.usr
+            })
+
+
+            console.log(usuarios)
+
+            this.res = usuarios
+            console.log(this.usr)
+
+        },
+
+        async Delete(id: string) {
+            const { pending, data: usuarios, error } = await useFetch<req_user_pessoal>(`${address}usuarios`, {
+                lazy: true,
+
+                headers: {
+                    "Content-Type": "application/json",
+                },
+
+                method: `DELETE`,
+
+                body: {
+                    id: id
+                }
+            })
+
+
+            console.log(usuarios)
+        },
+
+        async Patch(user: usuario_pessoal) {
+
+            console.log(user)
+
+            const { pending, data: usuarios, error } = await useFetch<req_user_pessoal>(`${address}usuarios`, {
+                lazy: true,
+
+                headers: {
+                    "Content-Type": "application/json",
+                },
+
+                method: `PATCH`,
+
+                body: user
+            })
+
+            console.log(user)
+        }
+    }
 }
 
 /*
